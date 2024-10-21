@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { HttpStatusCode } from '../enums/HttpStatusCode';
+import { empresaRoutes } from '../controllers/empresa';
 import { mesaRoutes } from '../controllers/mesa';
 import { categoriaProdutoRoutes } from '../controllers/categoriaProduto';
 
 const routes = Router();
 
+routes.use('/empresa', empresaRoutes.router);
 routes.use('/mesa', mesaRoutes.router);
 routes.use('/categoria-produto', categoriaProdutoRoutes.router);
 

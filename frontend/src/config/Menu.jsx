@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Col, Drawer, Menu as AntdMenu, Row } from 'antd';
+import { Button, Col, Drawer, Menu as AntdMenu, Row, Tag } from 'antd';
 import { LogoutOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useAuth } from '../providers/AuthProvider';
+import Detalhes from '../pages/empresa/Detalhes';
 
 export default function Menu() {
   const [selectedKey, setSelectedKey] = useState('');
@@ -54,21 +55,40 @@ export default function Menu() {
   return (
     <React.Fragment>
       <Row gutter={[10, 5]}
-        justify='center'
+        justify='space-between'
         style={{ background: '#1890ff', padding: '10px 20px' }}>
-        <Col span={24}>
+        <Col xl={7}
+          lg={8}
+          md={7}
+          xs={24}>
           <Button size='large'
             style={{ margin: '10px 0px' }}
             onClick={() => setVisible(!visible)}
             icon={<UnorderedListOutlined />} />
         </Col>
-        <Col style={{
-          position: 'absolute',
-          color: 'white',
-          textAlign: 'center',
-          fontSize: 40,
-        }}>
+        <Col xl={6}
+          lg={8}
+          md={10}
+          xs={24}
+          style={{ textAlign: 'center', fontSize: 40 }}>
           Restaurante
+        </Col>
+        <Col xl={7}
+          lg={8}
+          md={7}
+          xs={24}>
+          <Row gutter={[10, 10]}
+            justify='end'>
+            {auth.isAuthenticated() ? (
+              <Col>
+                <Detalhes id={auth.user.empresa.id}>
+                  <Tag color='blue'>
+                    {auth.user.empresa.razaoSocial}
+                  </Tag>
+                </Detalhes>
+              </Col>
+            ) : null}
+          </Row>
         </Col>
       </Row>
       <Drawer closable={false}
