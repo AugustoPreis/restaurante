@@ -1,6 +1,4 @@
+import { ListagemResultado } from '../../../types/ListagemResultado';
 import { MesaListagemDTO } from './MesaListagemDTO';
 
-export type MesaListagemResultadoDTO = Partial<{
-  data: MesaListagemDTO[];
-  total: number;
-}>
+export type MesaListagemResultadoDTO = Partial<ListagemResultado<MesaListagemDTO>>
