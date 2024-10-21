@@ -11,6 +11,18 @@ export default function Menu() {
   const auth = useAuth();
   const itens = [
     {
+      key: 'inicio',
+      label: 'Início',
+    },
+    {
+      key: 'mesas',
+      label: 'Mesas',
+    },
+    {
+      key: 'categoria-produto',
+      label: 'Categorias de Produto',
+    },
+    {
       key: 'sair',
       label: 'Sair',
       icon: <LogoutOutlined />,

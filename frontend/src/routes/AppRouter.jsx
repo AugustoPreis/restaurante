@@ -7,6 +7,8 @@ const NotFound = lazy(() => import('../components/NotFound'));
 
 const Login = lazy(() => import('../pages/login/Login'));
 const Inicio = lazy(() => import('../pages/inicio/Inicio'));
+const Mesa = lazy(() => import('../pages/mesa/Mesa'));
+const CategoriaProduto = lazy(() => import('../pages/categoriaProduto/CategoriaProduto'));
 
 
 export default function AppRouter() {
@@ -23,6 +25,10 @@ export default function AppRouter() {
             element={<Inicio />} />
           <Route path='inicio'
             element={<Inicio />} />
+          <Route path='mesas'
+            element={<Mesa />} />
+          <Route path='categoria-produto'
+            element={<CategoriaProduto />} />
         </Route>
       </Route>
       <Route path='*'
