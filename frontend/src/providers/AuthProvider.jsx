@@ -72,13 +72,7 @@ export default function AuthProvider(props) {
       return false;
     }
 
-    const { funcionario } = user;
-
-    if (!funcionario) {
-      return false;
-    }
-
-    return funcionario.adm || false;
+    return user.admin || false;
   }
 
   const contextValue = {
