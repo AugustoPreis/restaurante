@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import { apiRoutes } from './api.routes';
 import { verifyJWT } from '../middlewares/jwt';
 import { usuarioController } from '../controllers/usuario';
+import { arquivoRoutes } from '../controllers/arquivo';
 
 const routes = Router();
 
@@ -21,5 +22,7 @@ routes.post('/login', loginLimiter, (req, res, next) => {
 });
 
 routes.use('/api', verifyJWT, apiRoutes);
+
+routes.use('/arquivo', arquivoRoutes.router);
 
 export { routes };
