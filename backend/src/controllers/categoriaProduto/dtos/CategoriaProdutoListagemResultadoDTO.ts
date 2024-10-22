@@ -1,6 +1,4 @@
+import { ListagemResultado } from '../../../types/ListagemResultado';
 import { CategoriaProdutoListagemDTO } from './CategoriaProdutoListagemDTO';
 
-export type CategoriaProdutoListagemResultadoDTO = Partial<{
-  data: CategoriaProdutoListagemDTO[];
-  total: number;
-}>
+export type CategoriaProdutoListagemResultadoDTO = Partial<ListagemResultado<CategoriaProdutoListagemDTO>>
