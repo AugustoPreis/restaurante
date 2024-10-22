@@ -1,4 +1,5 @@
 import { categoriaProdutoController } from '.';
+import { isAdmin } from '../../middlewares/admin';
 import { DefaultRouter } from '../../middlewares/defaultRouter';
 
 export class CategoriaProdutoRoutes extends DefaultRouter {
@@ -15,14 +16,14 @@ export class CategoriaProdutoRoutes extends DefaultRouter {
 
     this.post('/', (req, res, next) => {
       categoriaProdutoController.cadastrar(req, res, next);
-    });
+    }, isAdmin);
 
     this.put('/:id', (req, res, next) => {
       categoriaProdutoController.atualizar(req, res, next);
-    });
+    }, isAdmin);
 
     this.put('/:id/inativar', (req, res, next) => {
       categoriaProdutoController.inativar(req, res, next);
-    });
+    }, isAdmin);
   }
 }
