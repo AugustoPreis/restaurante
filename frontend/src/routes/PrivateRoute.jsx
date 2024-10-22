@@ -1,8 +1,7 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Col, Row } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import Suspense from '../components/Suspense';
 import { useAuth } from '../providers/AuthProvider';
 
 export default function PrivateRoute() {
@@ -27,19 +26,7 @@ export default function PrivateRoute() {
 
   return (
     <React.Fragment>
-      <Suspense fallback={
-        <Row justify='center'
-          gutter={[15, 5]}
-          align='middle'
-          style={{ height: 'calc(100vh - 16px)' }}>
-          <Col style={{ fontSize: 20 }}>
-            <LoadingOutlined />
-          </Col>
-          <Col style={{ fontSize: 20 }}>
-            Carregando
-          </Col>
-        </Row>
-      }>
+      <Suspense>
         <Outlet />
       </Suspense>
     </React.Fragment>
