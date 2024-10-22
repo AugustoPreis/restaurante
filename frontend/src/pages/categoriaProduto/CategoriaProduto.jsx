@@ -62,9 +62,9 @@ export default function CategoriaProduto() {
 
     request(`/categoria-produto/${id}/inativar`, {
       method: 'PUT',
-    }).then((categoriaProduto) => {
+    }).then(() => {
       setLoading(false);
-      message.success(`Categoria do produto "${categoriaProduto.descricao}" inativada`);
+      message.success(`Categoria do produto inativada`);
       fetchData();
     }).catch((err) => {
       setLoading(false);
