@@ -50,6 +50,16 @@ export class ProdutoRepository {
       .getOne();
   }
 
+  async buscarFoto(uuid: string): Promise<Buffer> {
+    const produtoRaw = await this.repository
+      .createQueryBuilder('prod')
+      .select('prod.foto', 'foto')
+      .where('prod.uuid = :uuid', { uuid })
+      .getRawOne();
+
+    return produtoRaw?.foto;
+  }
+
   async buscarPorCodigo(produto: Produto): Promise<Produto> {
     const qb = this.repository
       .createQueryBuilder('prod')

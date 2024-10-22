@@ -75,6 +75,20 @@ export class ProdutoService {
     return produtoConsultaDTO;
   }
 
+  async buscarFoto(uuid: string): Promise<Buffer> {
+    if (!isValidString(uuid)) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'UUID do produto inválido');
+    }
+
+    const fotoProduto = await produtoRepository.buscarFoto(uuid);
+
+    if (!Buffer.isBuffer(fotoProduto) || fotoProduto.length === 0) {
+      return null;
+    }
+
+    return fotoProduto;
+  }
+
   async cadastrar(produtoCadastroDTO: ProdutoCadastroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoCadastroRetornoDTO> {
     const { codigo, nome, descricao, valor, categoriaId } = produtoCadastroDTO;
 
