@@ -24,18 +24,38 @@ export default function Menu() {
       label: 'Categorias de Produto',
     },
     {
+      key: 'administracao',
+      label: 'Administração',
+      permis: ['admin'],
+      type: 'group',
+      children: [
+        {
+          key: 'usuarios',
+          label: 'Usuários',
+        },
+      ],
+    },
+    {
       key: 'sair',
       label: 'Sair',
       icon: <LogoutOutlined />,
       style: { color: 'red' },
     },
-  ];
+  ].reduce((array, { permis, ...item }) => {
+    if (!Array.isArray(permis)) {
+      return array.concat(item);
+    }
+
+    if (permis.includes('admin') && !auth.isAdmin()) {
+      return array;
+    }
+
+    return array.concat(item);
+  }, []);
 
   useEffect(() => {
-    if (!selectedKey) {
-      setSelectedKey(window.location.pathname.substring(1));
-    }
-  }, [window.location.pathname.substring(1)]);
+    changeSelected();
+  }, [window.location.href]);
 
   const onSelect = (e) => {
     const { key } = e;
@@ -48,8 +68,22 @@ export default function Menu() {
     }
 
     setVisible(false);
-    setSelectedKey(key);
     navigate(key);
+  }
+
+  const changeSelected = () => {
+    const { href } = window.location;
+    const painel = '/painel';
+
+    if (!href.includes(painel)) {
+      setSelectedKey('inicio');
+
+      return;
+    }
+
+    const key = href.substring(href.indexOf(painel) + painel.length + 1);
+
+    setSelectedKey(key.trim() || 'inicio');
   }
 
   return (

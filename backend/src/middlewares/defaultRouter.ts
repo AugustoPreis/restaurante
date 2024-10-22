@@ -6,20 +6,32 @@ type RequestFunction = (req: Request, res: Response, next?: NextFunction) => voi
 export class DefaultRouter {
   public readonly router = Router();
 
-  get(path: string, method: RequestFunction) {
-    this.router.get(path, method);
+  private normalizeMiddlewares(middlewares: RequestHandler | RequestHandler[]): RequestHandler[] {
+    if (!middlewares) {
+      return [];
+    }
+
+    if (!Array.isArray(middlewares)) {
+      return [middlewares];
+    }
+
+    return middlewares;
   }
 
-  post(path: string, method: RequestFunction) {
-    this.router.post(path, method);
+  get(path: string, method: RequestFunction, middlewares?: RequestHandler | RequestHandler[]) {
+    this.router.get(path, this.normalizeMiddlewares(middlewares), method);
   }
 
-  put(path: string, method: RequestFunction) {
-    this.router.put(path, method);
+  post(path: string, method: RequestFunction, middlewares?: RequestHandler | RequestHandler[]) {
+    this.router.post(path, this.normalizeMiddlewares(middlewares), method);
   }
 
-  delete(path: string, method: RequestFunction) {
-    this.router.delete(path, method);
+  put(path: string, method: RequestFunction, middlewares?: RequestHandler | RequestHandler[]) {
+    this.router.put(path, this.normalizeMiddlewares(middlewares), method);
+  }
+
+  delete(path: string, method: RequestFunction, middlewares?: RequestHandler | RequestHandler[]) {
+    this.router.delete(path, this.normalizeMiddlewares(middlewares), method);
   }
 
   postUpload(path: string, method: RequestFunction, middlewares: RequestHandler | RequestHandler[]) {
