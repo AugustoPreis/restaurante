@@ -44,7 +44,7 @@ function Typeahead(props) {
     }, props.timeout || 500);
   }
 
-  const fetch = (visible, descricao) => {
+  const fetch = (visible, filtro) => {
     if (!visible) {
       return setData([]);
     }
@@ -53,7 +53,7 @@ function Typeahead(props) {
 
     const { url, method = 'GET', params = {}, api = true } = props;
 
-    params.descricao = descricao;
+    params.filtro = filtro;
 
     const config = {
       method,
@@ -70,7 +70,7 @@ function Typeahead(props) {
 
     request(url, {
       ...config,
-    }).then((data) => {
+    }).then(({ data }) => {
       setLoading(false);
 
       if (Array.isArray(data)) {
