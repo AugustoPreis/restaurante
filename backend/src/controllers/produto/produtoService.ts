@@ -32,6 +32,7 @@ export class ProdutoService {
       const produtoListagemDTO: ProdutoListagemDTO = {};
 
       produtoListagemDTO.id = produtoModel.id;
+      produtoListagemDTO.uuid = produtoModel.uuid;
       produtoListagemDTO.codigo = produtoModel.codigo;
       produtoListagemDTO.nome = produtoModel.nome;
       produtoListagemDTO.valor = produtoModel.valor;
@@ -91,6 +92,7 @@ export class ProdutoService {
 
     const produtoModel = new Produto();
 
+    produtoModel.uuid = crypto.randomUUID();
     produtoModel.codigo = codigo.trim();
     produtoModel.nome = nome.trim();
     produtoModel.categoria = new CategoriaProduto(categoriaId);

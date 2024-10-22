@@ -9,6 +9,9 @@ export class Produto {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
+  @Column({ name: 'uuid', type: 'uuid', update: false })
+  uuid: string;
+
   @Column({ name: 'codigo', update: false })
   codigo: string;
 

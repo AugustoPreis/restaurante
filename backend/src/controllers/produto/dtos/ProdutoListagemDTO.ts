@@ -2,6 +2,7 @@ import { CategoriaProdutoConsultaDTO } from '../../categoriaProduto/dtos/Categor
 
 export type ProdutoListagemDTO = Partial<{
   id: number;
+  uuid: string;
   codigo: string;
   nome: string;
   valor: number;
