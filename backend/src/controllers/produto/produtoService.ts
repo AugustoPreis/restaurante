@@ -110,7 +110,7 @@ export class ProdutoService {
     const produtoComCodigo = await produtoRepository.buscarPorCodigo(produtoModel);
 
     if (produtoComCodigo) {
-      throw new RequestError(HttpStatusCode.UNPROCESSABLE_ENTITY, `Código "${produtoComCodigo.codigo}" já cadastrado no produto "${produtoComCodigo.descricao}"`);
+      throw new RequestError(HttpStatusCode.UNPROCESSABLE_ENTITY, `Código "${produtoComCodigo.codigo}" já cadastrado no produto "${produtoComCodigo.nome}"`);
     }
 
     const produtoSalvo = await produtoRepository.salvar(produtoModel);

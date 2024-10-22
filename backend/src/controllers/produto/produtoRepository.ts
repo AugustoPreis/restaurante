@@ -21,7 +21,7 @@ export class ProdutoRepository {
       )
       .limit(parametros.itensPagina)
       .offset((parametros.paginaAtual - 1) * parametros.itensPagina)
-      .orderBy('produto.codigo');
+      .orderBy('prod.codigo');
 
     const ascOrDesc = parametros.crescente ? 'ASC' : 'DESC';
 
@@ -32,6 +32,9 @@ export class ProdutoRepository {
       case 'nome':
         qb.orderBy('prod.nome', ascOrDesc);
         break;
+      case 'valor':
+        qb.orderBy('prod.valor', ascOrDesc);
+        break;
     }
 
     return await qb.getManyAndCount();
@@ -40,6 +43,7 @@ export class ProdutoRepository {
   async buscarPorId(id: number): Promise<Produto> {
     return await this.repository
       .createQueryBuilder('prod')
+      .innerJoinAndSelect('prod.empresa', 'empresa')
       .innerJoinAndSelect('prod.categoria', 'categoria')
       .where('prod.id = :id', { id })
       .andWhere('prod.ativo IS TRUE')
@@ -49,6 +53,7 @@ export class ProdutoRepository {
   async buscarPorCodigo(produto: Produto): Promise<Produto> {
     const qb = this.repository
       .createQueryBuilder('prod')
+      .innerJoinAndSelect('prod.empresa', 'empresa')
       .where('prod.codigo = :codigo', { codigo: produto.codigo })
       .andWhere('prod.empresa = :empresa', { empresa: produto.empresa.id })
       .andWhere('prod.ativo IS TRUE')

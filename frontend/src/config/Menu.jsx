@@ -24,6 +24,10 @@ export default function Menu() {
       label: 'Categorias de Produto',
     },
     {
+      key: 'produto',
+      label: 'Produtos',
+    },
+    {
       key: 'administracao',
       label: 'Administração',
       permis: ['admin'],

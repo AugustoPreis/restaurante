@@ -25,7 +25,7 @@ export class Produto {
   @JoinColumn({ name: 'categoria_produto_id' })
   categoria: CategoriaProduto;
 
-  @Column({ name: 'foto', select: false })
+  @Column({ name: 'foto', type: 'bytea', select: false })
   foto: Buffer;
 
   @Column({ name: 'ativo' })

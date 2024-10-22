@@ -10,6 +10,7 @@ const Login = lazy(() => import('../pages/login/Login'));
 const Inicio = lazy(() => import('../pages/inicio/Inicio'));
 const Mesa = lazy(() => import('../pages/mesa/Mesa'));
 const CategoriaProduto = lazy(() => import('../pages/categoriaProduto/CategoriaProduto'));
+const Produto = lazy(() => import('../pages/produto/Produto'));
 const Usuario = lazy(() => import('../pages/usuario/Usuario'));
 
 
@@ -31,6 +32,8 @@ export default function AppRouter() {
             element={<Mesa />} />
           <Route path='categoria-produto'
             element={<CategoriaProduto />} />
+          <Route path='produto'
+            element={<Produto />} />
           <Route element={<AdminRoute />}>
             <Route path='usuarios'
               element={<Usuario />} />
