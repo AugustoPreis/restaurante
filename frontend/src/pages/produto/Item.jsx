@@ -10,10 +10,27 @@ export default function Item({ data }) {
 
   return (
     <Row gutter={[5, 15]}
+      justify={{ sm: 'start', xs: 'center' }}
       align='middle'>
-      <Col lg={22}
-        md={21}
-        xs={20}>
+      <Col xl={2}
+        lg={3}
+        md={4}
+        sm={5}>
+        <img src={`/arquivo/foto-produto/${data.uuid}`}
+          alt='Foto do produto'
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 10,
+            border: '1px solid #f0f0f0',
+          }} />
+      </Col>
+      <Col xl={20}
+        lg={19}
+        md={17}
+        sm={15}
+        xs={20}
+        style={{ paddingLeft: 15 }}>
         <Detalhes id={data.id}
           onClose={() => fetchData()}>
           <span style={{ fontSize: 20 }}>
