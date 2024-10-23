@@ -7,10 +7,12 @@ import { Usuario } from '../../models/Usuario';
 import { RequestError } from '../../utils/RequestError';
 import { round } from '../../utils/number';
 import { defaultParams } from '../../utils/params';
-import { isValidNumber, isValidString } from '../../utils/validators';
+import { isImage, isValidNumber, isValidString } from '../../utils/validators';
 import { UsuarioLogadoDTO } from '../usuario/dtos/UsuarioLogadoDTO';
 import { ProdutoAtualizacaoDTO } from './dtos/ProdutoAtualizacaoDTO';
 import { ProdutoAtualizacaoRetornoDTO } from './dtos/ProdutoAtualizacaoRetornoDTO';
+import { ProdutoAtualizarFotoDTO } from './dtos/ProdutoAtualizarFotoDTO';
+import { ProdutoAtualizarFotoResultadoDTO } from './dtos/ProdutoAtualizarFotoResultadoDTO';
 import { ProdutoCadastroDTO } from './dtos/ProdutoCadastroDTO';
 import { ProdutoCadastroRetornoDTO } from './dtos/ProdutoCadastroRetornoDTO';
 import { ProdutoConsultaDTO } from './dtos/ProdutoConsultaDTO';
@@ -190,6 +192,40 @@ export class ProdutoService {
     produtoAtualizacaoRetornoDTO.dataAlteracao = produtoSalvo.dataAlteracao;
 
     return produtoAtualizacaoRetornoDTO;
+  }
+
+  async atualizarFoto(produtoAtualizarFotoDTO: ProdutoAtualizarFotoDTO, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoAtualizarFotoResultadoDTO> {
+    const { id, foto } = produtoAtualizarFotoDTO;
+
+    if (!isValidNumber(id, { min: 1 })) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'ID do produto não informado');
+    }
+
+    if (!isImage(foto)) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'Foto do produto inválida');
+    }
+
+    const produtoModel = await produtoRepository.buscarPorId(id);
+
+    if (!produtoModel) {
+      throw new RequestError(HttpStatusCode.NOT_FOUND, 'Produto não encontrado');
+    }
+
+    if (produtoModel.empresa.id != usuarioLogado.empresa.id) {
+      throw new RequestError(HttpStatusCode.FORBIDDEN, 'Produto não pertence a empresa do usuário');
+    }
+
+    produtoModel.foto = foto;
+    produtoModel.dataAlteracao = new Date();
+    produtoModel.usuarioAlterou = new Usuario(usuarioLogado.id);
+
+    const produtoSalvo = await produtoRepository.salvar(produtoModel);
+
+    const produtoAtualizarFotoResultadoDTO: ProdutoAtualizarFotoResultadoDTO = {};
+
+    produtoAtualizarFotoResultadoDTO.uuid = produtoSalvo.uuid;
+
+    return produtoAtualizarFotoResultadoDTO;
   }
 
   async inativar(id: number, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoAtualizacaoRetornoDTO> {

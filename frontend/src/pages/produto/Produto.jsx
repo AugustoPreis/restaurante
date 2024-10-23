@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Col, message, Modal, Row } from 'antd';
+import { Col, message, Modal, notification, Row } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import request from '../../utils/request';
 import { ProdutoContext } from '../../context/Produto';
 import Filtro from './Filtro';
@@ -75,6 +76,35 @@ export default function Produto() {
     });
   }
 
+  const atualizarFoto = (foto, id) => {
+    if (!foto || !id) {
+      return;
+    }
+
+    notification.open({
+      message: 'Atualizando foto',
+      description: 'Aguarde...',
+      icon: <LoadingOutlined />,
+      duration: 0,
+    });
+
+    request(`/produto/${id}/foto`, {
+      method: 'PUT',
+      multipart: true,
+      files: [foto],
+    }).then(() => {
+      notification.destroy();
+      message.success('Foto atualizada com sucesso!');
+      fetchData(paginacao.paginaAtual);
+    }).catch((err) => {
+      notification.destroy();
+      Modal.error({
+        title: 'Erro!',
+        content: err.message,
+      });
+    });
+  }
+
   const changeFiltro = (value, key) => {
     setFiltro({ ...filtro, [key]: value });
   }
@@ -89,6 +119,7 @@ export default function Produto() {
       loading,
       fetchData,
       inativarItem,
+      atualizarFoto,
     }}>
       <Row gutter={[0, 20]}>
         <Col span={24}

@@ -4,6 +4,7 @@ import { produtoService } from '.';
 import { ProdutoListagemParametrosDTO } from './dtos/ProdutoListagemParametrosDTO';
 import { ProdutoCadastroDTO } from './dtos/ProdutoCadastroDTO';
 import { ProdutoAtualizacaoDTO } from './dtos/ProdutoAtualizacaoDTO';
+import { ProdutoAtualizarFotoDTO } from './dtos/ProdutoAtualizarFotoDTO';
 
 export class ProdutoController {
 
@@ -50,6 +51,21 @@ export class ProdutoController {
       produtoAtualizacaoDTO.id = Number(req.params.id);
 
       const result = await produtoService.atualizar(produtoAtualizacaoDTO, req.user);
+
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async atualizarFoto(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const produtoAtualizarFotoDTO: ProdutoAtualizarFotoDTO = {};
+
+      produtoAtualizarFotoDTO.id = Number(req.params.id);
+      produtoAtualizarFotoDTO.foto = req.file?.buffer;
+
+      const result = await produtoService.atualizarFoto(produtoAtualizarFotoDTO, req.user);
 
       res.status(HttpStatusCode.OK).json(result);
     } catch (err) {
