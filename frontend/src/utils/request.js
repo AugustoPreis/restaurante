@@ -91,5 +91,33 @@ function normalizeContext(url, dirt) {
     }
   }
 
+  if (context.multipart) {
+    context.headers['Content-Type'] = 'multipart/form-data';
+    context.body = multipartBody(context.body, context.files);
+  }
+
   return context;
+}
+
+function multipartBody(body, files) {
+  const formData = new FormData();
+
+  formData.append('data', JSON.stringify(body || {}));
+  formData.append('isMultipartRequest', 'true');
+
+  if (!Array.isArray(files)) {
+    return formData;
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    if (!file?.originFileObj) {
+      continue;
+    }
+
+    formData.append(`arquivo_${i + 1}`, file.originFileObj);
+  }
+
+  return formData;
 }
