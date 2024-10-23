@@ -1,3 +1,4 @@
+import bufferType from 'buffer-type';
 import { StringConfig, NumberConfig } from '../types/ValidatorConfig';
 
 export function isString(value: unknown): value is string {
@@ -61,4 +62,26 @@ export function isValidPagination(pagina: unknown, itensPagina: unknown): boolea
   const isValidItensPagina = isValidNumber(itensPagina, { allowString: true, min: 1 });
 
   return isValidPagina && isValidItensPagina;
+}
+
+export function isBuffer(value: unknown): value is Buffer {
+  return Buffer.isBuffer(value);
+}
+
+export function isValidBuffer(value: unknown): value is Buffer {
+  return isBuffer(value) && value.length > 0;
+}
+
+export function isImage(value: unknown): value is Buffer {
+  if (!isValidBuffer(value)) {
+    return false;
+  }
+
+  const bufferTypeResult = bufferType(value);
+
+  if (typeof bufferTypeResult?.type != 'string') {
+    return false;
+  }
+
+  return bufferTypeResult.type.includes('image/');
 }
