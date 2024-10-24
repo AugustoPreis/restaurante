@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { produtoService } from '../produto';
 import { parametrosService } from '../parametros';
+import { HttpStatusCode } from '../../enums/HttpStatusCode';
 
 export class ArquivoController {
 
@@ -15,7 +16,7 @@ export class ArquivoController {
         foto = await parametrosService.buscarPorNome('fotoPadraoProduto') as Buffer;
       }
 
-      res.status(200).send(foto);
+      res.status(HttpStatusCode.OK).send(foto);
     } catch (err) {
       next(err);
     }
