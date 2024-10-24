@@ -1,14 +1,9 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import Pedido from '../pedido/Pedido';
 
 export default function Inicio() {
 
   return (
-    <Row>
-      <Col span={24}
-        style={{ fontSize: 75, textAlign: 'center', marginTop: 50 }}>
-        Início
-      </Col>
-    </Row>
+    <Pedido />
   );
 }
