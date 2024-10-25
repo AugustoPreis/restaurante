@@ -12,7 +12,7 @@ const Mesa = lazy(() => import('../pages/mesa/Mesa'));
 const CategoriaProduto = lazy(() => import('../pages/categoriaProduto/CategoriaProduto'));
 const Produto = lazy(() => import('../pages/produto/Produto'));
 const Usuario = lazy(() => import('../pages/usuario/Usuario'));
-
+const Relatorio = lazy(() => import('../pages/relatorio/Relatorio'));
 
 export default function AppRouter() {
   return (
@@ -37,6 +37,8 @@ export default function AppRouter() {
           <Route element={<AdminRoute />}>
             <Route path='usuarios'
               element={<Usuario />} />
+            <Route path='relatorios'
+              element={<Relatorio />} />
           </Route>
         </Route>
       </Route>

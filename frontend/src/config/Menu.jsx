@@ -37,6 +37,10 @@ export default function Menu() {
           key: 'usuarios',
           label: 'Usuários',
         },
+        {
+          key: 'relatorios',
+          label: 'Relatórios',
+        },
       ],
     },
     {
