@@ -1,5 +1,5 @@
 import bufferType from 'buffer-type';
-import { StringConfig, NumberConfig } from '../types/ValidatorConfig';
+import { StringConfig, NumberConfig, DateConfig } from '../types/ValidatorConfig';
 
 export function isString(value: unknown): value is string {
   return typeof value === 'string';
@@ -84,4 +84,24 @@ export function isImage(value: unknown): value is Buffer {
   }
 
   return bufferTypeResult.type.includes('image/');
+}
+
+export function isDate(value: unknown): value is Date {
+  return value instanceof Date;
+}
+
+export function isValidDate(value: unknown, config?: DateConfig): value is Date {
+  if (config?.allowString) {
+    value = new Date(value as string);
+  }
+
+  if (!isDate(value)) {
+    return false;
+  }
+
+  if (isNaN(value.getTime())) {
+    return false;
+  }
+
+  return true;
 }

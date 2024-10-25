@@ -10,3 +10,7 @@ export interface NumberConfig {
   max?: number;
   allowString?: boolean;
 }
+
+export interface DateConfig {
+  allowString?: boolean;
+}
