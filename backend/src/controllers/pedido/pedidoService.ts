@@ -217,7 +217,7 @@ export class PedidoService {
 
       const pedidoSalvo = await pedidoRepository.salvar(pedidoModel, qr);
       const pedidoItensAtualizacaoRetornoDTO = await pedidoItemService.atualizarPorPedido(itens, pedidoSalvo.id, usuarioLogado, qr);
-      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar(pedidoSalvo.id, usuarioLogado, qr);
+      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar({ pedidoId: pedidoSalvo.id, tipo: 'ATUALIZACAO' }, usuarioLogado, qr);
 
       const pedidoAtualizacaoRetornoDTO: PedidoAtualizacaoRetornoDTO = {};
 
@@ -257,7 +257,7 @@ export class PedidoService {
       pedidoModel.fechado = true;
 
       const pedidoSalvo = await pedidoRepository.salvar(pedidoModel);
-      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar(pedidoSalvo.id, usuarioLogado, qr);
+      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar({ pedidoId: pedidoSalvo.id, tipo: 'FECHAMENTO' }, usuarioLogado, qr);
 
       const pedidoAtualizacaoRetornoDTO: PedidoAtualizacaoRetornoDTO = {};
 
@@ -297,7 +297,7 @@ export class PedidoService {
       pedidoModel.ativo = false;
 
       const pedidoSalvo = await pedidoRepository.salvar(pedidoModel);
-      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar(pedidoSalvo.id, usuarioLogado, qr);
+      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar({ pedidoId: pedidoSalvo.id, tipo: 'INATIVACAO' }, usuarioLogado, qr);
 
       const pedidoAtualizacaoRetornoDTO: PedidoAtualizacaoRetornoDTO = {};
 

@@ -13,6 +13,9 @@ export class PedidoAlteracao {
   @JoinColumn({ name: 'pedido_id' })
   pedido: Pedido;
 
+  @Column({ name: 'tipo' })
+  tipo: string;
+
   @Column({ name: 'data_cadastro' })
   dataCadastro: Date;
 
