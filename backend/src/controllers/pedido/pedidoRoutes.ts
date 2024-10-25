@@ -13,6 +13,10 @@ export class PedidoRoutes extends DefaultRouter {
       pedidoController.buscarPorId(req, res, next);
     });
 
+    this.get('/:id/dados-pagamento', (req, res, next) => {
+      pedidoController.buscarDadosPagamento(req, res, next);
+    })
+
     this.post('/', (req, res, next) => {
       pedidoController.cadastrar(req, res, next);
     });

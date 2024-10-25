@@ -3,6 +3,7 @@ import { Row, Modal, Form, Spin, Col, Input, message, Button, Divider } from 'an
 import request from '../../utils/request';
 import MesaTypeahaed from '../mesa/Typeahead';
 import ProdutoPedido from '../produto/Pedido';
+import PagamentoDetalhes from '../pagamento/Detalhes';
 import ItensDetalhes from './ItensDetalhes';
 
 export default function Detalhes({ id, onClose, children }) {
@@ -78,6 +79,7 @@ export default function Detalhes({ id, onClose, children }) {
       body: body,
     }).then(() => {
       setLoading(false);
+      message.success('Pedido salvo com sucesso.');
       handleClear();
       onClose?.();
     }).catch((err) => {
@@ -132,6 +134,7 @@ export default function Detalhes({ id, onClose, children }) {
     const nItens = [...itens];
 
     nItens.unshift({
+      index: Math.random(),
       produto: item,
       comanda: 1,
       quantidade: 1,
@@ -218,9 +221,11 @@ export default function Detalhes({ id, onClose, children }) {
               </Button>
             </Col>
             <Col>
-              <Button onClick={handleClear}>
-                Fechar
-              </Button>
+              <PagamentoDetalhes id={id}>
+                <Button disabled={!id}>
+                  Pagamento
+                </Button>
+              </PagamentoDetalhes>
             </Col>
             <Col>
               <Button type='primary'

@@ -92,6 +92,7 @@ export default function ItensDetalhes({ itens, changeItem, removerItem }) {
       columns={columns}
       dataSource={itens}
       pagination={false}
-      scroll={{ x: 550, y: 400 }} />
+      scroll={{ x: 550, y: 400 }}
+      rowKey={(el) => el.id || el.index} />
   );
 }

@@ -22,6 +22,8 @@ import { funcaoRepository } from '../funcao';
 import { PedidoAtualizacaoDTO } from './dtos/PedidoAtualizacaoDTO';
 import { PedidoAtualizacaoRetornoDTO } from './dtos/PedidoAtualizacaoRetornoDTO';
 import { pedidoAlteracaoService } from '../pedidoAlteracao';
+import { PedidoDadosPagamentoDTO } from './dtos/PedidoDadosPagamentoDTO';
+import { PedidoComandaDTO } from './dtos/PedidoComandaDTO';
 
 export class PedidoService {
 
@@ -72,6 +74,53 @@ export class PedidoService {
     pedidoConsultaDTO.itens = await pedidoItemService.buscarPorPedido(pedidoModel.id, usuarioLogado);
 
     return pedidoConsultaDTO;
+  }
+
+  async buscarDadosPagamento(id: number, usuarioLogado: UsuarioLogadoDTO): Promise<PedidoDadosPagamentoDTO> {
+    if (!isValidNumber(id, { min: 1 })) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'Pedido não informado');
+    }
+
+    const pedidoModel = await pedidoRepository.buscarPorId(id);
+
+    if (!pedidoModel) {
+      throw new RequestError(HttpStatusCode.NOT_FOUND, 'Pedido não encontrado');
+    }
+
+    if (pedidoModel.empresa.id != usuarioLogado.empresa.id) {
+      throw new RequestError(HttpStatusCode.FORBIDDEN, 'Pedido não pertence a empresa do usuário');
+    }
+
+    const pedidoDadosPagamentoDTO: PedidoDadosPagamentoDTO = {};
+    const pedidoItensConsultaDTO = await pedidoItemService.buscarPorPedido(pedidoModel.id, usuarioLogado);
+
+    pedidoDadosPagamentoDTO.valor = await funcaoRepository.valorPedido(pedidoModel.id);
+    pedidoDadosPagamentoDTO.valorPago = await funcaoRepository.valorPagoPedido(pedidoModel.id);
+    pedidoDadosPagamentoDTO.comandas = [];
+
+    for (let i = 0; i < pedidoItensConsultaDTO.length; i++) {
+      const pedidoItemConsultaDTO = pedidoItensConsultaDTO[i];
+      let index = pedidoDadosPagamentoDTO.comandas.findIndex((comanda) => comanda.numero === pedidoItemConsultaDTO.comanda);
+
+      if (index === -1) {
+        index = pedidoDadosPagamentoDTO.comandas.length;
+
+        const pedidoComandaDTO: PedidoComandaDTO = {};
+
+        pedidoComandaDTO.numero = pedidoItemConsultaDTO.comanda;
+        pedidoComandaDTO.valor = await funcaoRepository.valorPedido(pedidoModel.id, pedidoItemConsultaDTO.comanda);
+        pedidoComandaDTO.valorPago = await funcaoRepository.valorPagoPedido(pedidoModel.id, pedidoItemConsultaDTO.comanda);
+        pedidoComandaDTO.itens = [];
+
+        pedidoDadosPagamentoDTO.comandas.push(pedidoComandaDTO);
+      }
+
+      pedidoDadosPagamentoDTO.comandas[index].itens.push(pedidoItemConsultaDTO);
+    }
+
+    pedidoDadosPagamentoDTO.comandas = pedidoDadosPagamentoDTO.comandas.sort((a, b) => a.numero - b.numero);
+
+    return pedidoDadosPagamentoDTO;
   }
 
   async cadastrar(pedidoCadastroDTO: PedidoCadastroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<PedidoCadastroRetornoDTO> {

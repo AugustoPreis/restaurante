@@ -31,6 +31,18 @@ export class PedidoController {
     }
   }
 
+  async buscarDadosPagamento(req: Request, res: Response, next: NextFunction) {
+    try {
+      const pedidoId = Number(req.params.id);
+
+      const result = await pedidoService.buscarDadosPagamento(pedidoId, req.user);
+
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async cadastrar(req: Request, res: Response, next: NextFunction) {
     try {
       const pedidoCadastroDTO = req.body as PedidoCadastroDTO;

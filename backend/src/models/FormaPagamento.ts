@@ -11,4 +11,8 @@ export class FormaPagamento {
 
   @Column({ name: 'ativo' })
   ativo: boolean;
+
+  constructor(id?: number) {
+    this.id = id;
+  }
 }
