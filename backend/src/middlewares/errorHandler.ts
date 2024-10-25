@@ -82,9 +82,7 @@ export function formatTypeormError(queryFailedError: QueryFailedError): RequestE
     error.message = 'Erro de sintaxe';
   }
 
-  if (error.message === DEFAULT_ERROR_MESSAGE) {
-    logger.message(queryFailedError.message, 'error');
-  }
+  logger.message(queryFailedError.message, 'error');
 
   return error;
 }
