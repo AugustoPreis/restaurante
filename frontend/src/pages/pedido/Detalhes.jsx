@@ -91,15 +91,11 @@ export default function Detalhes({ id, onClose, children }) {
     });
   }
 
-  const handleConfirmCancel = () => {
-    if (!id) {
-      return;
-    }
-
+  const handleConfirm = (content, callback) => {
     Modal.confirm({
       title: 'Atenção',
-      content: 'Deseja cancelar o pedido?',
-      onOk: handleCancel,
+      content: content,
+      onOk: callback,
     });
   }
 
@@ -116,6 +112,29 @@ export default function Detalhes({ id, onClose, children }) {
       setLoading(false);
       handleClear();
       message.success('Pedido cancelado com sucesso.');
+      onClose?.();
+    }).catch((err) => {
+      setLoading(false);
+      Modal.error({
+        title: 'Erro!',
+        content: err.message,
+      });
+    });
+  }
+
+  const handleFechar = () => {
+    if (!id) {
+      return;
+    }
+
+    setLoading(true);
+
+    request(`/pedido/${id}/fechar`, {
+      method: 'PUT',
+    }).then(() => {
+      setLoading(false);
+      handleClear();
+      message.success('Pedido fechado com sucesso.');
       onClose?.();
     }).catch((err) => {
       setLoading(false);
@@ -209,28 +228,52 @@ export default function Detalhes({ id, onClose, children }) {
         destroyOnClose
         onCancel={handleClear}
         footer={
-          <Row gutter={[5, 5]}
+          <Row gutter={[5, 10]}
             justify='end'>
             <Divider />
-            <Col>
-              <Button danger
+            <Col xl={4}
+              lg={5}
+              md={6}
+              xs={12}>
+              <Button block
+                danger
                 type='dashed'
                 disabled={!id}
-                onClick={handleConfirmCancel}>
-                Cancelar
+                onClick={() => handleConfirm('Deseja cancelar o pedido?', handleCancel)}>
+                Cancelar Pedido
               </Button>
             </Col>
-            <Col>
+            <Col xl={4}
+              lg={5}
+              md={6}
+              xs={12}>
+              <Button block
+                disabled={!id}
+                onClick={() => handleConfirm('Deseja fechar o pedido?', handleFechar)}>
+                Finalizar Pedido
+              </Button>
+            </Col>
+            <Col xl={4}
+              lg={5}
+              md={6}
+              sm={12}
+              xs={24}>
               <PagamentoDetalhes id={id}>
-                <Button disabled={!id}>
-                  Pagamento
+                <Button block
+                  disabled={!id}>
+                  Visualizar Pagamentos
                 </Button>
               </PagamentoDetalhes>
             </Col>
-            <Col>
-              <Button type='primary'
+            <Col xl={4}
+              lg={5}
+              md={6}
+              sm={12}
+              xs={24}>
+              <Button block
+                type='primary'
                 onClick={form.submit}>
-                Salvar
+                Salvar Pedido
               </Button>
             </Col>
           </Row>

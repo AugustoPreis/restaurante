@@ -69,6 +69,18 @@ export class PedidoController {
     }
   }
 
+  async fechar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const pedidoId = Number(req.params.id);
+
+      const result = await pedidoService.fechar(pedidoId, req.user);
+
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async inativar(req: Request, res: Response, next: NextFunction) {
     try {
       const pedidoId = Number(req.params.id);

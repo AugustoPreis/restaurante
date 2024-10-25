@@ -234,6 +234,46 @@ export class PedidoService {
     }
   }
 
+  async fechar(id: number, usuarioLogado: UsuarioLogadoDTO): Promise<PedidoAtualizacaoRetornoDTO> {
+    if (!isValidNumber(id, { min: 1 })) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'ID do pedido não informado');
+    }
+
+    const pedidoModel = await pedidoRepository.buscarPorId(id);
+
+    if (!pedidoModel) {
+      throw new RequestError(HttpStatusCode.NOT_FOUND, 'Pedido não encontrado');
+    }
+
+    if (pedidoModel.empresa.id != usuarioLogado.empresa.id) {
+      throw new RequestError(HttpStatusCode.FORBIDDEN, 'Pedido não pertence a empresa do usuário');
+    }
+
+    let qr: QueryRunner;
+
+    try {
+      qr = await getQueryRunner();
+
+      pedidoModel.fechado = true;
+
+      const pedidoSalvo = await pedidoRepository.salvar(pedidoModel);
+      const pedidoAlteracaoCadastroRetornoDTO = await pedidoAlteracaoService.cadastrar(pedidoSalvo.id, usuarioLogado, qr);
+
+      const pedidoAtualizacaoRetornoDTO: PedidoAtualizacaoRetornoDTO = {};
+
+      pedidoAtualizacaoRetornoDTO.dataAlteracao = pedidoAlteracaoCadastroRetornoDTO.dataCadastro;
+      pedidoAtualizacaoRetornoDTO.itens = [];
+
+      await commit(qr);
+
+      return pedidoAtualizacaoRetornoDTO;
+    } catch (err) {
+      await rollback(qr);
+
+      throw err;
+    }
+  }
+
   async inativar(id: number, usuarioLogado: UsuarioLogadoDTO): Promise<PedidoAtualizacaoRetornoDTO> {
     if (!isValidNumber(id, { min: 1 })) {
       throw new RequestError(HttpStatusCode.BAD_REQUEST, 'ID do pedido não informado');

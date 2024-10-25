@@ -25,6 +25,10 @@ export class PedidoRoutes extends DefaultRouter {
       pedidoController.atualizar(req, res, next);
     });
 
+    this.put('/:id/fechar', (req, res, next) => {
+      pedidoController.fechar(req, res, next);
+    });
+
     this.put('/:id/inativar', (req, res, next) => {
       pedidoController.inativar(req, res, next);
     });
