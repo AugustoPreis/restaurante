@@ -5,8 +5,28 @@ import { RequestError } from '../../utils/RequestError';
 import { isValidBuffer, isValidString } from '../../utils/validators';
 import { ArquivoCadastroDTO } from './dtos/ArquivoCadastroDTO';
 import { ArquivoCadastroRetornoDTO } from './dtos/ArquivoCadastroRetornoDTO';
+import { ArquivoConsultaDTO } from './dtos/ArquivoConsultaDTO';
 
 export class ArquivoService {
+
+  async buscarPorUuid(uuid: string): Promise<ArquivoConsultaDTO> {
+    if (!isValidString(uuid)) {
+      throw new RequestError(HttpStatusCode.BAD_REQUEST, 'UUID inválido');
+    }
+
+    const arquivoModel = await arquivoRepository.buscarPorUuid(uuid);
+
+    if (!arquivoModel) {
+      throw new RequestError(HttpStatusCode.NOT_FOUND, 'Arquivo não encontrado');
+    }
+
+    const arquivoConsultaDTO: ArquivoConsultaDTO = {};
+
+    arquivoConsultaDTO.nome = arquivoModel.nome;
+    arquivoConsultaDTO.conteudo = arquivoModel.conteudo;
+
+    return arquivoConsultaDTO;
+  }
 
   async cadastrar(arquivoCadastroDTO: ArquivoCadastroDTO): Promise<ArquivoCadastroRetornoDTO> {
     const { nome, conteudo } = arquivoCadastroDTO;
