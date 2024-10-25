@@ -11,8 +11,14 @@ export class FuncaoRepository {
     return query?.[0]?.result;
   }
 
-  async valorPedido(pedidoId: number): Promise<number> {
-    const result = await this.funcao<number>('valor_pedido', [pedidoId]);
+  async valorPedido(pedidoId: number, comanda?: number): Promise<number> {
+    const result = await this.funcao<number>('valor_pedido', [pedidoId, comanda]);
+
+    return result;
+  }
+
+  async valorPagoPedido(pedidoId: number, comanda?: number): Promise<number> {
+    const result = await this.funcao<number>('valor_pago_pedido', [pedidoId, comanda]);
 
     return result;
   }
