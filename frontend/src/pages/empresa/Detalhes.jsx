@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Row, Modal, Form, Spin, Col, Input } from 'antd';
+import { Row, Modal, Form, Spin, Col, Input, Card } from 'antd';
 import request from '../../utils/request';
 import MaskInput from '../../components/MaskInput';
 import { useAuth } from '../../providers/AuthProvider';
+import Parametros from './Parametros';
 
 export default function Detalhes({ id, onClose, children }) {
   const [visible, setVisible] = useState(false);
@@ -126,6 +127,12 @@ export default function Detalhes({ id, onClose, children }) {
                   <MaskInput preset='cnpj'
                     maxLength={14} />
                 </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Card size='small'
+                  title='Parâmetros'>
+                  <Parametros />
+                </Card>
               </Col>
             </Row>
           </Spin>

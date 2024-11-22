@@ -3,4 +3,5 @@ export type EmpresaAtualizacaoDTO = Partial<{
   razaoSocial: string;
   nomeFantasia: string;
   cnpj: string;
+  estoqueNegativo: boolean;
 }>

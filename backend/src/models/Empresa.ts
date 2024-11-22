@@ -15,6 +15,9 @@ export class Empresa {
   @Column({ name: 'cnpj' })
   cnpj: string;
 
+  @Column({ name: 'estoque_negativo' })
+  estoqueNegativo: boolean;
+
   @Column({ name: 'ativo' })
   ativo: boolean;
 

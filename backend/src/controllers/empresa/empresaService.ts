@@ -30,12 +30,13 @@ export class EmpresaService {
     empresaConsultaDTO.razaoSocial = empresaModel.razaoSocial;
     empresaConsultaDTO.nomeFantasia = empresaModel.nomeFantasia;
     empresaConsultaDTO.cnpj = empresaModel.cnpj;
+    empresaConsultaDTO.estoqueNegativo = empresaModel.estoqueNegativo;
 
     return empresaConsultaDTO;
   }
 
   async atualizar(empresaAtualizacaoDTO: EmpresaAtualizacaoDTO, usuarioLogado: UsuarioLogadoDTO): Promise<EmpresaAtualizacaoRetornoDTO> {
-    const { id, razaoSocial, nomeFantasia, cnpj } = empresaAtualizacaoDTO;
+    const { id, razaoSocial, nomeFantasia, cnpj, estoqueNegativo } = empresaAtualizacaoDTO;
 
     if (!isValidNumber(id, { min: 1 })) {
       throw new RequestError(HttpStatusCode.BAD_REQUEST, 'Código da empresa não informado');
@@ -70,6 +71,7 @@ export class EmpresaService {
     empresaModel.razaoSocial = razaoSocial.trim();
     empresaModel.nomeFantasia = nomeFantasia.trim();
     empresaModel.cnpj = cnpj.trim();
+    empresaModel.estoqueNegativo = !!estoqueNegativo;
 
     await empresaRepository.salvar(empresaModel);
 
