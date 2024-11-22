@@ -63,3 +63,14 @@ Para iniciar o front-end em modo de desenvolvimento:
 ```bash
 npm run dev
 ```
+
+## Funcionalidades implementadas:
+- Cadastros (Categorias, Produtos, Mesas e Usuários)
+- Gestão de Mesas/Pedidos
+
+## Em desenvolvimento:
+- Movimentação de Estoque
+
+## TODO
+- Relatórios
+- Socket para sincronizar pedidos
