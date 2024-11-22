@@ -5,12 +5,14 @@ import { ProdutoListagemParametrosDTO } from './dtos/ProdutoListagemParametrosDT
 import { ProdutoCadastroDTO } from './dtos/ProdutoCadastroDTO';
 import { ProdutoAtualizacaoDTO } from './dtos/ProdutoAtualizacaoDTO';
 import { ProdutoAtualizarFotoDTO } from './dtos/ProdutoAtualizarFotoDTO';
+import { MovimentoCadastroDTO } from '../movimento/dto/MovimentoCadastroDTO';
+import { movimentoService } from '../movimento';
 
 export class ProdutoController {
 
   async listar(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const parametros = req.query as ProdutoListagemParametrosDTO;
+      const parametros = req.query as unknown as ProdutoListagemParametrosDTO;
 
       const result = await produtoService.listar(parametros, req.user);
 
@@ -51,6 +53,22 @@ export class ProdutoController {
       produtoAtualizacaoDTO.id = Number(req.params.id);
 
       const result = await produtoService.atualizar(produtoAtualizacaoDTO, req.user);
+
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async movimentarEstoque(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      let movimentoCadastroDTO: MovimentoCadastroDTO = req.body;
+
+      if (req.method === 'DELETE') {
+        movimentoCadastroDTO = req.query;
+      }
+
+      const result = await movimentoService.cadastrar(movimentoCadastroDTO, req.user);
 
       res.status(HttpStatusCode.OK).json(result);
     } catch (err) {

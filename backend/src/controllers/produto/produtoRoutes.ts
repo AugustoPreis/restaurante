@@ -21,6 +21,10 @@ export class ProdutoRoutes extends DefaultRouter {
       produtoController.cadastrar(req, res, next);
     }, isAdmin);
 
+    this.post('/:id/estoque', (req, res, next) => {
+      produtoController.movimentarEstoque(req, res, next);
+    });
+
     this.put('/:id', (req, res, next) => {
       produtoController.atualizar(req, res, next);
     }, isAdmin);
@@ -33,5 +37,9 @@ export class ProdutoRoutes extends DefaultRouter {
     this.put('/:id/inativar', (req, res, next) => {
       produtoController.inativar(req, res, next);
     }, isAdmin);
+
+    this.delete('/:id/estoque', (req, res, next) => {
+      produtoController.movimentarEstoque(req, res, next);
+    });
   }
 }

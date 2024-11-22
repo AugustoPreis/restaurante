@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Checkbox, Col, Input, Row, Select } from 'antd';
 import { useProdutoContext } from '../../context/Produto';
 import Label from '../../components/Label';
+import Movimento from '../estoque/Movimento';
 import Detalhes from './Detalhes';
 
 export default function Filtro() {
@@ -10,7 +11,8 @@ export default function Filtro() {
   return (
     <Row gutter={[10, 10]}>
       <Col xl={4}
-        md={6}
+        lg={6}
+        md={8}
         sm={8}
         xs={24}>
         <Label title='Ordenar:'>
@@ -29,8 +31,8 @@ export default function Filtro() {
         </Label>
       </Col>
       <Col xl={8}
-        lg={10}
-        md={12}
+        lg={9}
+        md={16}
         sm={16}
         xs={24}>
         <Label title='Filtrar:'>
@@ -43,9 +45,24 @@ export default function Filtro() {
             onChange={(e) => setFiltro(e.target.value, 'descricao')} />
         </Label>
       </Col>
-      <Col xl={{ span: 3, offset: 9 }}
-        lg={{ span: 4, offset: 4 }}
-        md={6}
+      <Col xl={{ span: 4, offset: 5 }}
+        lg={5}
+        md={10}
+        sm={12}
+        xs={24}>
+        <Label title='&nbsp;'>
+          <Movimento>
+            <Button block
+              size='large'>
+              Movimentar Estoque
+            </Button>
+          </Movimento>
+        </Label>
+      </Col>
+      <Col xl={3}
+        lg={{ span: 4, offset: 0 }}
+        md={{ span: 10, offset: 4 }}
+        sm={12}
         xs={24}>
         <Label title='&nbsp;'>
           <Detalhes onClose={() => fetchData()}>
