@@ -22,4 +22,10 @@ export class FuncaoRepository {
 
     return result;
   }
+
+  async estoqueAtual(produtoId: number): Promise<number> {
+    const result = await this.funcao<number>('estoque_atual', [produtoId]);
+
+    return result;
+  }
 }
