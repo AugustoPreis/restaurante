@@ -3,6 +3,7 @@ import { HttpStatusCode } from '../../enums/HttpStatusCode';
 import { Movimento } from '../../models/Movimento';
 import { PedidoItem } from '../../models/PedidoItem';
 import { Usuario } from '../../models/Usuario';
+import { defaultParams } from '../../utils/params';
 import { RequestError } from '../../utils/RequestError';
 import { isValidDate, isValidNumber, isValidString } from '../../utils/validators';
 import { empresaRepository } from '../empresa';
@@ -10,9 +11,38 @@ import { funcaoRepository } from '../funcao';
 import { produtoRepository } from '../produto';
 import { UsuarioLogadoDTO } from '../usuario/dtos/UsuarioLogadoDTO';
 import { MovimentoCadastroDTO } from './dto/MovimentoCadastroDTO';
+import { MovimentoListagemDTO } from './dto/MovimentoListagemDTO';
+import { MovimentoListagemParametrosDTO } from './dto/MovimentoListagemParametrosDTO';
+import { MovimentoListagemResultadoDTO } from './dto/MovimentoListagemResultadoDTO';
 import { MovimentoResultadoDTO } from './dto/MovimentoResultadoDTO';
 
 export class MovimentoService {
+
+  async listarPorProduto(movimentoListagemParametrosDTO: MovimentoListagemParametrosDTO, usuarioLogado: UsuarioLogadoDTO): Promise<MovimentoListagemResultadoDTO> {
+    const parametros = defaultParams<MovimentoListagemParametrosDTO>(movimentoListagemParametrosDTO, usuarioLogado);
+
+    const [movimentosModel, total] = await movimentoRepository.listarPorProduto(parametros);
+
+    const movimentosListagemDTO: MovimentoListagemDTO[] = [];
+
+    for (let i = 0; i < movimentosModel.length; i++) {
+      const movimentoModel = movimentosModel[i];
+
+      const movimentoListagemDTO: MovimentoListagemDTO = {};
+
+      movimentoListagemDTO.id = movimentoModel.id;
+      movimentoListagemDTO.tipo = movimentoModel.tipo;
+      movimentoListagemDTO.quantidade = movimentoModel.quantidade;
+      movimentoListagemDTO.estoque = movimentoModel.estoque;
+      movimentoListagemDTO.descricao = movimentoModel.descricao;
+      movimentoListagemDTO.dataMovimento = movimentoModel.dataMovimento;
+      movimentoListagemDTO.dataCadastro = movimentoModel.dataCadastro;
+
+      movimentosListagemDTO.push(movimentoListagemDTO);
+    }
+
+    return { data: movimentosListagemDTO, total };
+  }
 
   async cadastrar(movimentoCadastroDTO: MovimentoCadastroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<MovimentoResultadoDTO> {
     const { produtoId, quantidade, dataMovimento, tipo, descricao, pedidoItemId } = movimentoCadastroDTO;

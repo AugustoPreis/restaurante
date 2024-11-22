@@ -9,6 +9,7 @@ import { pedidoRoutes } from '../controllers/pedido';
 import { formaPagamentoRoutes } from '../controllers/formaPagamento';
 import { pagamentoRoutes } from '../controllers/pagamento';
 import { relatorioRoutes } from '../controllers/relatorio';
+import { movimentoRoutes } from '../controllers/movimento';
 
 const routes = Router();
 
@@ -17,6 +18,7 @@ routes.use('/mesa', mesaRoutes.router);
 routes.use('/categoria-produto', categoriaProdutoRoutes.router);
 routes.use('/usuario', usuarioRoutes.router);
 routes.use('/produto', produtoRoutes.router);
+routes.use('/movimento', movimentoRoutes.router);
 routes.use('/pedido', pedidoRoutes.router);
 routes.use('/forma-pagamento', formaPagamentoRoutes.router);
 routes.use('/pagamento', pagamentoRoutes.router);

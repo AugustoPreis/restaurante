@@ -3,11 +3,12 @@ import { Row, Modal, Spin, Button, Col, Table } from 'antd';
 import request from '../../utils/request';
 import Label from '../../components/Label';
 import ProdutoTypeahead from '../produto/Typeahead';
+import ListagemMovimentos from './ListagemMovimentos';
 
 const stateInicial = {
   paginacao: {
     paginaAtual: 1,
-    itensPagina: 10,
+    itensPagina: 5,
   },
 }
 
@@ -18,6 +19,7 @@ export default function Movimento({ children }) {
   const [data, setData] = useState([]);
   const [paginacao, setPaginacao] = useState(stateInicial.paginacao);
   const columns = [
+    Table.EXPAND_COLUMN,
     {
       title: 'Produto',
       key: 'nome',
@@ -34,7 +36,7 @@ export default function Movimento({ children }) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (visible) {
-        fetch();
+        fetchData();
       }
     }, 500);
 
@@ -46,12 +48,14 @@ export default function Movimento({ children }) {
     setVisible(true);
   }
 
-  const fetch = (paginaAtual = stateInicial.paginacao.paginaAtual) => {
+  const fetchData = (paginaAtual = stateInicial.paginacao.paginaAtual) => {
     setLoading(true);
 
     const params = {
+      ...paginacao,
       produtoId: filtro.produto?.id,
       movimentaEstoque: true,
+      paginaAtual,
     }
 
     request('/produto', {
@@ -114,6 +118,15 @@ export default function Movimento({ children }) {
                 columns={columns}
                 dataSource={data}
                 rowKey='id'
+                onChange={(pag) => fetchData(pag.current)}
+                scroll={{ x: 500 }}
+                expandable={{
+                  columnTitle: 'Movimentos',
+                  expandRowByClick: true,
+                  expandedRowRender: (row) => (
+                    <ListagemMovimentos produtoId={row.id} />
+                  ),
+                }}
                 pagination={{
                   current: paginacao.paginaAtual,
                   pageSize: paginacao.itensPagina,
