@@ -3,5 +3,6 @@ export type ProdutoAtualizacaoDTO = Partial<{
   nome: string;
   descricao: string;
   valor: number;
+  movimentaEstoque: boolean;
   categoriaId: number;
 }>

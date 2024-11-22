@@ -69,6 +69,7 @@ export class ProdutoService {
     produtoConsultaDTO.nome = produtoModel.nome;
     produtoConsultaDTO.descricao = produtoModel.descricao;
     produtoConsultaDTO.valor = produtoModel.valor;
+    produtoConsultaDTO.movimentaEstoque = produtoModel.movimentaEstoque;
     produtoConsultaDTO.categoria = {};
 
     produtoConsultaDTO.categoria.id = produtoModel.categoria.id;
@@ -92,7 +93,7 @@ export class ProdutoService {
   }
 
   async cadastrar(produtoCadastroDTO: ProdutoCadastroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoCadastroRetornoDTO> {
-    const { codigo, nome, descricao, valor, categoriaId } = produtoCadastroDTO;
+    const { codigo, nome, descricao, valor, categoriaId, movimentaEstoque } = produtoCadastroDTO;
 
     if (!isValidString(codigo, { minLength: 1, maxLength: 20 })) {
       throw new RequestError(HttpStatusCode.BAD_REQUEST, 'Código do produto inválido');
@@ -111,6 +112,7 @@ export class ProdutoService {
     produtoModel.uuid = crypto.randomUUID();
     produtoModel.codigo = codigo.trim();
     produtoModel.nome = nome.trim();
+    produtoModel.movimentaEstoque = !!movimentaEstoque;
     produtoModel.categoria = new CategoriaProduto(categoriaId);
 
     if (isValidString(descricao, { minLength: 1 })) {
@@ -142,7 +144,7 @@ export class ProdutoService {
   }
 
   async atualizar(produtoAtualizacaoDTO: ProdutoAtualizacaoDTO, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoAtualizacaoRetornoDTO> {
-    const { id, nome, descricao, valor, categoriaId } = produtoAtualizacaoDTO;
+    const { id, nome, descricao, valor, categoriaId, movimentaEstoque } = produtoAtualizacaoDTO;
 
     if (!isValidNumber(id, { min: 1 })) {
       throw new RequestError(HttpStatusCode.BAD_REQUEST, 'ID do produto não informado');
@@ -168,6 +170,7 @@ export class ProdutoService {
 
     produtoModel.nome = nome.trim();
     produtoModel.categoria = new CategoriaProduto(categoriaId);
+    produtoModel.movimentaEstoque = !!movimentaEstoque;
 
     if (isValidString(descricao, { minLength: 1 })) {
       produtoModel.descricao = descricao.trim();

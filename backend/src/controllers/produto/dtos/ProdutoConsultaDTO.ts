@@ -5,5 +5,6 @@ export type ProdutoConsultaDTO = Partial<{
   nome: string;
   descricao: string;
   valor: number;
+  movimentaEstoque: boolean;
   categoria: CategoriaProdutoListagemDTO;
 }>

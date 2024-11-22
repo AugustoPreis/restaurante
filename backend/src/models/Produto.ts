@@ -24,6 +24,9 @@ export class Produto {
   @Column({ name: 'valor', type: 'numeric' })
   valor: number;
 
+  @Column({ name: 'movimenta_estoque' })
+  movimentaEstoque: boolean;
+
   @ManyToOne(() => CategoriaProduto)
   @JoinColumn({ name: 'categoria_produto_id' })
   categoria: CategoriaProduto;

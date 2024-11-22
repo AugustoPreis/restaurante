@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Row, Modal, Form, Spin, Col, Input } from 'antd';
+import { Row, Modal, Form, Spin, Col, Input, Card } from 'antd';
 import request from '../../utils/request';
 import MoneyInput from '../../components/MoneyInput';
 import CategoriaProdutoTypeahead from '../categoriaProduto/Typeahead';
+import Parametros from './Parametros';
 
 export default function Detalhes({ id, onClose, children }) {
   const [visible, setVisible] = useState(false);
@@ -133,6 +134,12 @@ export default function Detalhes({ id, onClose, children }) {
                   label='Descrição'>
                   <Input.TextArea autoSize={{ minRows: 2, maxRows: 5 }} />
                 </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Card size='small'
+                  title='Parâmetros'>
+                  <Parametros />
+                </Card>
               </Col>
             </Row>
           </Spin>
