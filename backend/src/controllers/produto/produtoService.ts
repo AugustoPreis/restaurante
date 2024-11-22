@@ -8,6 +8,7 @@ import { RequestError } from '../../utils/RequestError';
 import { round } from '../../utils/number';
 import { defaultParams } from '../../utils/params';
 import { isImage, isValidNumber, isValidString } from '../../utils/validators';
+import { funcaoRepository } from '../funcao';
 import { UsuarioLogadoDTO } from '../usuario/dtos/UsuarioLogadoDTO';
 import { ProdutoAtualizacaoDTO } from './dtos/ProdutoAtualizacaoDTO';
 import { ProdutoAtualizacaoRetornoDTO } from './dtos/ProdutoAtualizacaoRetornoDTO';
@@ -23,7 +24,9 @@ import { ProdutoListagemResultadoDTO } from './dtos/ProdutoListagemResultadoDTO'
 export class ProdutoService {
 
   async listar(produtoListagemParametrosDTO: ProdutoListagemParametrosDTO, usuarioLogado: UsuarioLogadoDTO): Promise<ProdutoListagemResultadoDTO> {
-    const parametros = defaultParams(produtoListagemParametrosDTO, usuarioLogado);
+    const parametros = defaultParams<ProdutoListagemParametrosDTO>(produtoListagemParametrosDTO, usuarioLogado);
+
+    parametros.movimentaEstoque = produtoListagemParametrosDTO.movimentaEstoque?.toString() === 'true';
 
     const [produtosModel, total] = await produtoRepository.listar(parametros);
 
@@ -38,6 +41,7 @@ export class ProdutoService {
       produtoListagemDTO.codigo = produtoModel.codigo;
       produtoListagemDTO.nome = produtoModel.nome;
       produtoListagemDTO.valor = produtoModel.valor;
+      produtoListagemDTO.estoque = await funcaoRepository.estoqueAtual(produtoModel.id);
       produtoListagemDTO.categoria = {};
 
       produtoListagemDTO.categoria.descricao = produtoModel.categoria.descricao;

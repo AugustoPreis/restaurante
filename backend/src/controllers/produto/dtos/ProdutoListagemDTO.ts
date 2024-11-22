@@ -6,5 +6,6 @@ export type ProdutoListagemDTO = Partial<{
   codigo: string;
   nome: string;
   valor: number;
+  estoque: number;
   categoria: CategoriaProdutoConsultaDTO;
 }>

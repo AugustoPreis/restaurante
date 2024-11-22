@@ -23,6 +23,10 @@ export class ProdutoRepository {
       .offset((parametros.paginaAtual - 1) * parametros.itensPagina)
       .orderBy('prod.codigo');
 
+    if (parametros.movimentaEstoque) {
+      qb.andWhere('prod.movimentaEstoque IS TRUE');
+    }
+
     const ascOrDesc = parametros.crescente ? 'ASC' : 'DESC';
 
     switch (parametros.ordem) {
