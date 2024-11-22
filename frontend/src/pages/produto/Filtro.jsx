@@ -3,6 +3,7 @@ import { Button, Checkbox, Col, Input, Row, Select } from 'antd';
 import { useProdutoContext } from '../../context/Produto';
 import Label from '../../components/Label';
 import Movimento from '../estoque/Movimento';
+import Consulta from '../estoque/Consulta';
 import Detalhes from './Detalhes';
 
 export default function Filtro() {
@@ -11,8 +12,8 @@ export default function Filtro() {
   return (
     <Row gutter={[10, 10]}>
       <Col xl={4}
-        lg={6}
-        md={8}
+        lg={8}
+        md={10}
         sm={8}
         xs={24}>
         <Label title='Ordenar:'>
@@ -31,8 +32,8 @@ export default function Filtro() {
         </Label>
       </Col>
       <Col xl={8}
-        lg={9}
-        md={16}
+        lg={16}
+        md={14}
         sm={16}
         xs={24}>
         <Label title='Filtrar:'>
@@ -45,9 +46,21 @@ export default function Filtro() {
             onChange={(e) => setFiltro(e.target.value, 'descricao')} />
         </Label>
       </Col>
-      <Col xl={{ span: 4, offset: 5 }}
-        lg={5}
-        md={10}
+      <Col xl={4}
+        md={8}
+        sm={12}
+        xs={24}>
+        <Label title='&nbsp;'>
+          <Consulta>
+            <Button block
+              size='large'>
+              Consultar Estoque
+            </Button>
+          </Consulta>
+        </Label>
+      </Col>
+      <Col xl={4}
+        md={8}
         sm={12}
         xs={24}>
         <Label title='&nbsp;'>
@@ -59,10 +72,8 @@ export default function Filtro() {
           </Movimento>
         </Label>
       </Col>
-      <Col xl={3}
-        lg={{ span: 4, offset: 0 }}
-        md={{ span: 10, offset: 4 }}
-        sm={12}
+      <Col xl={4}
+        md={8}
         xs={24}>
         <Label title='&nbsp;'>
           <Detalhes onClose={() => fetchData()}>

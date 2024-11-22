@@ -27,6 +27,10 @@ export class ProdutoRepository {
       qb.andWhere('prod.movimentaEstoque IS TRUE');
     }
 
+    if (parametros.produtoId) {
+      qb.andWhere('prod.id = :produtoId', { produtoId: parametros.produtoId });
+    }
+
     const ascOrDesc = parametros.crescente ? 'ASC' : 'DESC';
 
     switch (parametros.ordem) {
