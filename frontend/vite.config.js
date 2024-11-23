@@ -2,14 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import eslint from 'vite-plugin-eslint';
 
-const BACKEND_PORT = 3000;
-const FRONTEND_PORT = 4000;
-const PROXY_OPTIONS = {
-  target: `http://localhost:${BACKEND_PORT}`,
-  changeOrigin: true,
-  secure: false,
-};
-
 export default defineConfig({
   plugins: [
     react(),
@@ -20,11 +12,13 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: FRONTEND_PORT,
+    port: 4000,
     proxy: {
-      '/login': PROXY_OPTIONS, //login no sistema
-      '/api': PROXY_OPTIONS, //exige autenticação
-      '/arquivo': PROXY_OPTIONS, //buscar arquivos
+      '^/(login|api|arquivo)': {
+        target: `http://localhost:3000`,
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });
