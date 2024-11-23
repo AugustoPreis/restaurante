@@ -4,7 +4,6 @@ import { HttpStatusCode } from '../../enums/HttpStatusCode';
 import { Empresa } from '../../models/Empresa';
 import { Pedido } from '../../models/Pedido';
 import { PedidoItem } from '../../models/PedidoItem';
-import { Produto } from '../../models/Produto';
 import { Usuario } from '../../models/Usuario';
 import { RequestError } from '../../utils/RequestError';
 import { isValidNumber } from '../../utils/validators';
@@ -12,10 +11,11 @@ import { UsuarioLogadoDTO } from '../usuario/dtos/UsuarioLogadoDTO';
 import { PedidoItemCadastroDTO } from './dtos/PedidoItemCadastroDTO';
 import { PedidoItemCadastroRetornoDTO } from './dtos/PedidoItemCadastroRetornoDTO';
 import { PedidoItemConsultaDTO } from './dtos/PedidoItemConsultaDTO';
-import { produtoService } from '../produto';
+import { produtoRepository, produtoService } from '../produto';
 import { PedidoItemAtualizacaoDTO } from './dtos/PedidoItemAtualizacaoDTO';
 import { PedidoItemInativarParametrosDTO } from './dtos/PedidoItemInativarParametrosDTO';
 import { PedidoItemAtualizacaoRetornoDTO } from './dtos/PedidoItemAtualizacaoRetornoDTO';
+import { movimentoService } from '../movimento';
 
 export class PedidoItemService {
 
@@ -126,10 +126,11 @@ export class PedidoItemService {
     }
 
     const pedidoItemModel = new PedidoItem();
+    const produtoModel = await produtoRepository.buscarPorId(produtoId);
 
     pedidoItemModel.pedido = new Pedido(pedidoId);
     pedidoItemModel.comanda = comanda;
-    pedidoItemModel.produto = new Produto(produtoId);
+    pedidoItemModel.produto = produtoModel;
     pedidoItemModel.quantidade = quantidade;
     pedidoItemModel.valor = valor;
     pedidoItemModel.dataCadastro = new Date();
@@ -142,6 +143,17 @@ export class PedidoItemService {
 
     pedidoItemCadastroRetornoDTO.id = pedidoItemSalvo.id;
     pedidoItemCadastroRetornoDTO.dataCadastro = pedidoItemSalvo.dataCadastro;
+
+    if (produtoModel.movimentaEstoque) {
+      pedidoItemCadastroRetornoDTO.movimentoEstoque = await movimentoService.cadastrar({
+        dataMovimento: pedidoItemModel.dataCadastro,
+        descricao: 'Cadastro de item no pedido',
+        pedidoItemId: pedidoItemSalvo.id,
+        quantidade: pedidoItemSalvo.quantidade,
+        produtoId: produtoModel.id,
+        tipo: 'S',
+      }, usuarioLogado, qr);
+    }
 
     return pedidoItemCadastroRetornoDTO;
   }
@@ -174,6 +186,17 @@ export class PedidoItemService {
 
       pedidoItemAtualizacaoRetornoDTO.id = pedidoItemSalvo.id;
       pedidoItemAtualizacaoRetornoDTO.dataAlteracao = pedidoItemSalvo.dataAlteracao;
+
+      if (pedidoItemModel.produto.movimentaEstoque) {
+        pedidoItemAtualizacaoRetornoDTO.movimentoEstoque = await movimentoService.cadastrar({
+          dataMovimento: pedidoItemModel.dataAlteracao,
+          descricao: 'Inativação de item no pedido',
+          pedidoItemId: pedidoItemSalvo.id,
+          quantidade: pedidoItemSalvo.quantidade,
+          produtoId: pedidoItemModel.produto.id,
+          tipo: 'E',
+        }, usuarioLogado, qr);
+      }
 
       pedidoItensAtualizacaoRetornoDTO.push(pedidoItemAtualizacaoRetornoDTO);
     }

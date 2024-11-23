@@ -1,3 +1,4 @@
+import { QueryRunner } from 'typeorm';
 import { movimentoRepository } from '.';
 import { HttpStatusCode } from '../../enums/HttpStatusCode';
 import { Movimento } from '../../models/Movimento';
@@ -44,7 +45,7 @@ export class MovimentoService {
     return { data: movimentosListagemDTO, total };
   }
 
-  async cadastrar(movimentoCadastroDTO: MovimentoCadastroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<MovimentoResultadoDTO> {
+  async cadastrar(movimentoCadastroDTO: MovimentoCadastroDTO, usuarioLogado: UsuarioLogadoDTO, qr?: QueryRunner): Promise<MovimentoResultadoDTO> {
     const { produtoId, quantidade, dataMovimento, tipo, descricao, pedidoItemId } = movimentoCadastroDTO;
 
     if (!isValidNumber(produtoId, { allowString: true })) {
@@ -64,7 +65,7 @@ export class MovimentoService {
     movimentoModel.produto = await produtoRepository.buscarPorId(produtoId);
     movimentoModel.quantidade = Number(quantidade);
     movimentoModel.tipo = tipo;
-    movimentoModel.estoque = await funcaoRepository.estoqueAtual(produtoId);
+    movimentoModel.estoque = await funcaoRepository.estoqueAtual(produtoId, qr);
     movimentoModel.dataMovimento = new Date();
     movimentoModel.dataCadastro = new Date();
     movimentoModel.usuarioCadastrou = new Usuario(usuarioLogado.id);
@@ -99,7 +100,7 @@ export class MovimentoService {
       movimentoModel.dataMovimento = new Date(dataMovimento);
     }
 
-    const movimentoSalvo = await movimentoRepository.salvar(movimentoModel);
+    const movimentoSalvo = await movimentoRepository.salvar(movimentoModel, qr);
 
     const movimentoResultadoDTO: MovimentoResultadoDTO = {};
 

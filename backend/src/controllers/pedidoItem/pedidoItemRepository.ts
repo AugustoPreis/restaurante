@@ -18,7 +18,9 @@ export class PedidoItemRepository {
   async buscarParaInativacao(pedidoId: number, ids: number[], qr: QueryRunner): Promise<PedidoItem[]> {
     const qb = this.repository
       .createQueryBuilder('pedidoItem', qr)
-      .where('pedidoItem.pedido = :pedidoId', { pedidoId });
+      .innerJoinAndSelect('pedidoItem.produto', 'produto')
+      .where('pedidoItem.pedido = :pedidoId', { pedidoId })
+      .andWhere('pedidoItem.ativo IS TRUE');
 
     if (ids.length) {
       qb.andWhere('pedidoItem.id NOT IN (:...ids)', { ids });

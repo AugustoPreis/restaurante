@@ -302,7 +302,7 @@ export class PedidoService {
       const pedidoAtualizacaoRetornoDTO: PedidoAtualizacaoRetornoDTO = {};
 
       pedidoAtualizacaoRetornoDTO.dataAlteracao = pedidoAlteracaoCadastroRetornoDTO.dataCadastro;
-      pedidoAtualizacaoRetornoDTO.itens = [];
+      pedidoAtualizacaoRetornoDTO.itens = await pedidoItemService.inativar({ pedidoId: pedidoSalvo.id, ids: [] }, usuarioLogado, qr);
 
       await commit(qr);
 

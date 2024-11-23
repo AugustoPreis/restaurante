@@ -1,3 +1,4 @@
+import { QueryRunner } from 'typeorm';
 import { Database } from '../../database';
 import { Movimento } from '../../models/Movimento';
 import { MovimentoListagemParametrosDTO } from './dto/MovimentoListagemParametrosDTO';
@@ -17,7 +18,11 @@ export class MovimentoRepository {
       .getManyAndCount();
   }
 
-  async salvar(arquivo: Movimento): Promise<Movimento> {
+  async salvar(arquivo: Movimento, qr?: QueryRunner): Promise<Movimento> {
+    if (qr) {
+      return qr.manager.save(arquivo);
+    }
+
     return this.repository.save(arquivo);
   }
 }
