@@ -13,7 +13,7 @@ export default function Menu() {
   const itens = [
     {
       key: 'inicio',
-      label: 'Início',
+      label: 'Início/Mesas',
     },
     {
       key: 'mesas',
