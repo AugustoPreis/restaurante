@@ -67,9 +67,9 @@ npm run dev
 ## Funcionalidades implementadas:
 - Cadastros (Categorias, Produtos, Mesas e Usuários)
 - Gestão de Mesas/Pedidos
+- Movimentação de Estoque
 
 ## Em desenvolvimento:
-- Movimentação de Estoque
 
 ## TODO
 - Relatórios
