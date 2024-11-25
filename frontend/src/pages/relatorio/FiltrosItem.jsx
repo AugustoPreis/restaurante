@@ -12,7 +12,9 @@ export default function FiltrosItem({ filtros, data, changeData }) {
   const campos = useMemo(() => {
     const result = [];
 
-    const filtros = ['periodo', 'produto', 'usuario'];
+    if (!Array.isArray(filtros)) {
+      return result;
+    }
 
     if (filtros.includes('periodo')) {
       result.push(
