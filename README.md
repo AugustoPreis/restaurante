@@ -68,9 +68,9 @@ npm run dev
 - Cadastros (Categorias, Produtos, Mesas e Usuários)
 - Gestão de Mesas/Pedidos
 - Movimentação de Estoque
+- Socket para sincronizar pedidos
 
 ## Em desenvolvimento:
-- Socket para sincronizar pedidos
 
 ## TODO
 - Relatórios
