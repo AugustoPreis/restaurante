@@ -71,6 +71,6 @@ npm run dev
 - Socket para sincronizar pedidos
 
 ## Em desenvolvimento:
+- Relatórios
 
 ## TODO
-- Relatórios
