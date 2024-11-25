@@ -70,7 +70,7 @@ npm run dev
 - Movimentação de Estoque
 
 ## Em desenvolvimento:
+- Socket para sincronizar pedidos
 
 ## TODO
 - Relatórios
-- Socket para sincronizar pedidos
