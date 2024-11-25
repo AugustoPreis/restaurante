@@ -9,7 +9,7 @@ import { RelatorioListagemDTO } from './dtos/RelatorioListagemDTO';
 import { RelatorioListagemParametrosDTO } from './dtos/RelatorioListagemParametrosDTO';
 import { RelatorioListagemResultadoDTO } from './dtos/RelatorioListagemResultadoDTO';
 import { RelatorioImpressaoRetornoDTO } from './dtos/RelatorioImpressaoRetornoDTO';
-import { DefaultReport } from '../../relatorios/DefaultReport';
+import { DefaultReport } from '../../reports/DefaultReport';
 import { arquivoService } from '../arquivo';
 
 export class RelatorioService {
