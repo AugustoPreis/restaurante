@@ -58,3 +58,19 @@ export function formatValor(value: number, decimais: number = 2): number {
 
   return Math.round(value * base) / base;
 }
+
+export function formatReal(value: number): string {
+  if (!['string', 'number'].includes(typeof value)) {
+    return 'R$ 0,00';
+  }
+
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
+}
+
+//remove quebras de linha
+export function formatReportText(value: string, replaceValue = ' '): string {
+  return value.replace(/(\r\n|\n|\r)/gm, replaceValue);
+}
