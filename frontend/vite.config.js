@@ -1,24 +1,26 @@
+import 'dotenv/config';
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import eslint from 'vite-plugin-eslint';
 
-export default defineConfig({
-  plugins: [
-    react(),
-    eslint(),
-  ],
-  build: {
-    outDir: '../backend/build/src/dist',
-    emptyOutDir: true,
-  },
-  server: {
-    port: 4000,
-    proxy: {
-      '^/(login|api|arquivo)': {
-        target: `http://localhost:3000`,
-        changeOrigin: true,
-        secure: false,
+export default defineConfig(() => {
+  const { env } = process;
+
+  return {
+    plugins: [react()],
+    build: {
+      outDir: './dist',
+      emptyOutDir: true,
+    },
+    server: {
+      port: env.VITE_FRONTEND_PORT,
+      proxy: {
+        '^/(login|api|arquivo)': {
+          target: [env.VITE_BACKEND_URL, env.VITE_BACKEND_PORT].join(':'),
+          changeOrigin: true,
+          secure: false,
+        },
       },
     },
-  },
+  }
 });
