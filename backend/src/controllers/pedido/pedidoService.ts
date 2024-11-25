@@ -24,6 +24,8 @@ import { PedidoAtualizacaoRetornoDTO } from './dtos/PedidoAtualizacaoRetornoDTO'
 import { pedidoAlteracaoService } from '../pedidoAlteracao';
 import { PedidoDadosPagamentoDTO } from './dtos/PedidoDadosPagamentoDTO';
 import { PedidoComandaDTO } from './dtos/PedidoComandaDTO';
+import { emitEvent } from '../../events/socket';
+import { socket } from '../../server';
 
 export class PedidoService {
 
@@ -165,6 +167,8 @@ export class PedidoService {
         pedidoCadastroRetornoDTO.itens = await pedidoItemService.cadastrarPorPedido(itens, pedidoSalvo.id, usuarioLogado, qr);
       }
 
+      emitEvent(socket, 'pedido', { type: 'cadastro', data: pedidoCadastroRetornoDTO });
+
       await commit(qr);
 
       return pedidoCadastroRetornoDTO;
@@ -264,6 +268,8 @@ export class PedidoService {
       pedidoAtualizacaoRetornoDTO.dataAlteracao = pedidoAlteracaoCadastroRetornoDTO.dataCadastro;
       pedidoAtualizacaoRetornoDTO.itens = [];
 
+      emitEvent(socket, 'pedido', { type: 'fechamento', data: { id, ...pedidoAtualizacaoRetornoDTO } });
+
       await commit(qr);
 
       return pedidoAtualizacaoRetornoDTO;
@@ -303,6 +309,8 @@ export class PedidoService {
 
       pedidoAtualizacaoRetornoDTO.dataAlteracao = pedidoAlteracaoCadastroRetornoDTO.dataCadastro;
       pedidoAtualizacaoRetornoDTO.itens = await pedidoItemService.inativar({ pedidoId: pedidoSalvo.id, ids: [] }, usuarioLogado, qr);
+
+      emitEvent(socket, 'pedido', { type: 'inativacao', data: { id, ...pedidoAtualizacaoRetornoDTO } });
 
       await commit(qr);
 

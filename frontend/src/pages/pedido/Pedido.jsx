@@ -4,6 +4,7 @@ import request from '../../utils/request';
 import { PedidoContext } from '../../context/Pedido';
 import Filtro from './Filtro';
 import Listagem from './Listagem';
+import { socket } from '../../utils/socket';
 
 const stateInicial = {
   filtro: {
@@ -20,6 +21,14 @@ export default function Pedido() {
 
   useEffect(() => {
     fetchData();
+
+    socket.connect();
+
+    socket.on('pedido', () => {
+      fetchData();
+    });
+
+    return () => socket.disconnect();
   }, []);
 
   const fetchData = () => {
