@@ -3,6 +3,7 @@ import { Database } from '../../database';
 import { Pedido } from '../../models/Pedido';
 import { PedidoListagemParametrosDTO } from './dtos/PedidoListagemParametrosDTO';
 import { RelatorioImpressaoFiltroDTO } from '../relatorio/dtos/RelatorioImpressaoFiltroDTO';
+import { PedidoAlteracao } from '../../models/PedidoAlteracao';
 
 export class PedidoRepository {
   private readonly repository = Database.getRepository(Pedido);
@@ -66,6 +67,39 @@ export class PedidoRepository {
       .andWhere('pedido.empresa = :empresa', { empresa: parametros.usuarioLogado.empresa.id })
       .orderBy('pedido.dataCadastro')
       .getMany();
+  }
+
+  async pedidosFechados(parametros: RelatorioImpressaoFiltroDTO): Promise<Pedido[]> {
+    const qb = Database.getRepository(PedidoAlteracao)
+      .createQueryBuilder('alt')
+      .innerJoinAndSelect('alt.pedido', 'pedido')
+      .innerJoinAndSelect('pedido.mesa', 'mesa')
+      .where('pedido.ativo IS TRUE')
+      .andWhere('pedido.fechado IS TRUE')
+      .andWhere(`alt.tipo = 'FECHAMENTO'`)
+      .andWhere('pedido.empresa = :empresa', { empresa: parametros.usuarioLogado.empresa.id });
+
+    if (parametros.dataInicio && parametros.dataFim) {
+      qb.andWhere(`
+        date_trunc('day', alt.dataCadastro)
+          BETWEEN
+        date_trunc('day', :dataInicio::timestamp)
+          AND
+        date_trunc('day', :dataFim::timestamp)
+      `, {
+        dataInicio: parametros.dataInicio,
+        dataFim: parametros.dataFim,
+      });
+    }
+
+    const pedidosAlteracao = await qb
+      .orderBy('alt.dataCadastro', 'DESC')
+      .getMany();
+
+    return pedidosAlteracao.map(pedidoAlteracao => ({
+      ...pedidoAlteracao.pedido,
+      dataCadastro: pedidoAlteracao.dataCadastro,
+    }));
   }
 
   async salvar(pedido: Pedido, qr?: QueryRunner): Promise<Pedido> {

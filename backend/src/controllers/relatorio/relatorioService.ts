@@ -12,6 +12,7 @@ import { RelatorioImpressaoRetornoDTO } from './dtos/RelatorioImpressaoRetornoDT
 import { DefaultReport } from '../../reports/DefaultReport';
 import { arquivoService } from '../arquivo';
 import { relatorioPedidosAbertos } from '../../reports/models/pedidosAbertos';
+import { relatorioPedidosFechados } from '../../reports/models/pedidosFechados';
 
 export class RelatorioService {
 
@@ -100,6 +101,9 @@ export class RelatorioService {
     switch (relatorioListagemDTO.codigo) {
       case 'pedidos-abertos':
         file = await relatorioPedidosAbertos(parametros);
+        break;
+      case 'pedidos-fechados':
+        file = await relatorioPedidosFechados(parametros);
         break;
     }
 
