@@ -42,7 +42,7 @@ export async function relatorioPedidosAbertos(parametros: RelatorioImpressaoFilt
 
     y += 30;
 
-    const dataCadastroFormatada = format(new Date(), "dd 'de' MMMM 'de' yyyy, 'às' HH:mm", { locale: ptBR });
+    const dataCadastroFormatada = format(pedido.dataCadastro, "dd 'de' MMMM 'de' yyyy, 'às' HH:mm", { locale: ptBR });
 
     doc
       .font('Helvetica', 10)
