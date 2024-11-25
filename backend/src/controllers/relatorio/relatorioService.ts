@@ -11,6 +11,7 @@ import { RelatorioListagemResultadoDTO } from './dtos/RelatorioListagemResultado
 import { RelatorioImpressaoRetornoDTO } from './dtos/RelatorioImpressaoRetornoDTO';
 import { DefaultReport } from '../../reports/DefaultReport';
 import { arquivoService } from '../arquivo';
+import { relatorioPedidosAbertos } from '../../reports/models/pedidosAbertos';
 
 export class RelatorioService {
 
@@ -43,7 +44,7 @@ export class RelatorioService {
 
   async imprimir(relatorioImpressaoFiltroDTO: RelatorioImpressaoFiltroDTO, usuarioLogado: UsuarioLogadoDTO): Promise<RelatorioImpressaoRetornoDTO> {
     const { relatorioId, usuarioId, produtoId, dataInicio, dataFim } = relatorioImpressaoFiltroDTO;
-    const parametros: RelatorioImpressaoFiltroDTO = {};
+    const parametros: RelatorioImpressaoFiltroDTO = { usuarioLogado };
 
     if (!isValidNumber(relatorioId, { allowString: true })) {
       throw new RequestError(HttpStatusCode.BAD_REQUEST, 'ID do relatório não informado');
@@ -94,7 +95,13 @@ export class RelatorioService {
   }
 
   async relatorioPorCodigo(parametros: RelatorioImpressaoFiltroDTO, relatorioListagemDTO: RelatorioListagemDTO): Promise<Buffer> {
-    const file: DefaultReport = new DefaultReport();
+    let file: DefaultReport;
+
+    switch (relatorioListagemDTO.codigo) {
+      case 'pedidos-abertos':
+        file = await relatorioPedidosAbertos(parametros);
+        break;
+    }
 
     if (!file) {
       throw new RequestError(HttpStatusCode.NOT_FOUND, `Relatório "${relatorioListagemDTO.titulo}" não implementado`);

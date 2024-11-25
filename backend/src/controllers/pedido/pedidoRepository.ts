@@ -2,6 +2,7 @@ import { QueryRunner } from 'typeorm';
 import { Database } from '../../database';
 import { Pedido } from '../../models/Pedido';
 import { PedidoListagemParametrosDTO } from './dtos/PedidoListagemParametrosDTO';
+import { RelatorioImpressaoFiltroDTO } from '../relatorio/dtos/RelatorioImpressaoFiltroDTO';
 
 export class PedidoRepository {
   private readonly repository = Database.getRepository(Pedido);
@@ -54,6 +55,17 @@ export class PedidoRepository {
       .andWhere('pedido.fechado IS FALSE')
       .andWhere('pedido.ativo IS TRUE')
       .getOne();
+  }
+
+  async pedidosAbertos(parametros: RelatorioImpressaoFiltroDTO): Promise<Pedido[]> {
+    return await this.repository
+      .createQueryBuilder('pedido')
+      .innerJoinAndSelect('pedido.mesa', 'mesa')
+      .where('pedido.ativo IS TRUE')
+      .andWhere('pedido.fechado IS FALSE')
+      .andWhere('pedido.empresa = :empresa', { empresa: parametros.usuarioLogado.empresa.id })
+      .orderBy('pedido.dataCadastro')
+      .getMany();
   }
 
   async salvar(pedido: Pedido, qr?: QueryRunner): Promise<Pedido> {
