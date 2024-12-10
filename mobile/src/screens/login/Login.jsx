@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../context/AuthContext';
 import request from '../../utils/request';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 export default function Login() {
   const [form, setForm] = useState({});
@@ -51,36 +53,25 @@ export default function Login() {
       <Text style={styles.title}>
         Login
       </Text>
-      <View style={styles.inputContainer}>
-        <Icon size={25}
-          name='mail-outline'
-          style={styles.icon} />
-        <TextInput style={styles.input}
-          value={form.login}
-          placeholder='Usuário'
-          onChangeText={(value) => changeForm(value, 'login')} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Icon size={25}
-          name='lock-closed-outline'
-          style={styles.icon} />
-        <TextInput style={styles.input}
-          secureTextEntry
-          placeholder='Senha'
-          onChangeText={(value) => changeForm(value, 'senha')}
-          value={form.senha} />
-      </View>
-      <TouchableOpacity style={styles.button}
-        disabled={loading}
+      <Input value={form.login}
+        placeholder='Usuário'
+        onChangeText={(value) => changeForm(value, 'login')}
+        icon={
+          <Icon size={25}
+            name='user' />
+        } />
+      <Input value={form.senha}
+        placeholder='Senha'
+        onChangeText={(value) => changeForm(value, 'senha')}
+        icon={
+          <Icon size={25}
+            name='lock' />
+        } />
+      <Button disabled={loading}
+        loading={loading}
         onPress={handleSubmit}>
-        {loading ? (
-          <ActivityIndicator color='#fff' />
-        ) : (
-          <Text style={styles.buttonText}>
-            Login
-          </Text>
-        )}
-      </TouchableOpacity>
+        Entrar
+      </Button>
     </View>
   );
 };
@@ -98,35 +89,5 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     fontWeight: 'bold',
     color: 'black',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 50,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    height: '100%',
-  },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#1E90FF',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
   },
 });
