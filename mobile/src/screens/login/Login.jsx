@@ -1,19 +1,48 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../context/AuthContext';
+import request from '../../utils/request';
 
 export default function Login() {
   const [form, setForm] = useState({});
-  const { isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { isAuthenticated, updateAuthentication } = useAuth();
   const navigation = useNavigation();
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.navigate('Pedidos');
+    }
+  }, []);
+
   const handleSubmit = () => {
-    console.log(form);
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    request('/login', {
+      method: 'POST',
+      body: form,
+    }).then((data) => {
+      updateAuthentication(data);
+      navigation.navigate('Pedidos');
+    }).catch((err) => {
+      changeForm(null, 'senha');
+      Alert.alert('Erro!', err.message);
+    }).finally(() => {
+      setLoading(false);
+    });
   }
 
   const changeForm = (value, key) => {
+    if (loading) {
+      return;
+    }
+
     setForm({ ...form, [key]: value });
   }
 
@@ -41,12 +70,16 @@ export default function Login() {
           onChangeText={(value) => changeForm(value, 'senha')}
           value={form.senha} />
       </View>
-      <TouchableOpacity
-        style={styles.button}
+      <TouchableOpacity style={styles.button}
+        disabled={loading}
         onPress={handleSubmit}>
-        <Text style={styles.buttonText}>
-          Login
-        </Text>
+        {loading ? (
+          <ActivityIndicator color='#fff' />
+        ) : (
+          <Text style={styles.buttonText}>
+            Login
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
