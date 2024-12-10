@@ -70,7 +70,6 @@ npm run dev
 - Movimentação de Estoque
 - Socket para sincronizar pedidos
 
-## Em desenvolvimento:
-- Relatórios
-
 ## TODO
+- Relatórios
+- Mobile para lançamento de itens em pedidos abertos
