@@ -13,3 +13,9 @@ coverage
 *.zip
 *.log
 *.gz
+
+#Mobile
+.expo/
+dist/
+web-build/
+.metro-health-check*
