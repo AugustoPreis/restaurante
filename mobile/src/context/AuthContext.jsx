@@ -7,14 +7,22 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const updateAuthentication = (isAuthenticated) => {
-    setIsAuthenticated(isAuthenticated);
+  const updateAuthentication = (newUser) => {
+    if (!newUser) {
+      return setUser(null);
+    }
+
+    setUser(newUser);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, updateAuthentication }}>
+    <AuthContext.Provider value={{
+      isAuthenticated: !!user,
+      updateAuthentication,
+      user,
+    }}>
       {children}
     </AuthContext.Provider>
   );
