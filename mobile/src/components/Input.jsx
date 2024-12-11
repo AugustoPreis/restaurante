@@ -1,11 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
 
-export default function Input({ icon, ...props }) {
+export default function Input({ icon, size = 'large', prefix, style, ...props }) {
+  const inputStyle = [
+    style,
+    styles.container,
+    size === 'small' ? styles.small : styles.large,
+  ];
 
   return (
-    <View style={styles.container}>
+    <View style={inputStyle}>
       {icon}
+      {prefix ? (
+        <Text style={styles.prefix}>
+          {prefix}
+        </Text>
+      ) : null}
       <TextInput {...props}
         style={[styles.input, icon && styles.withIcon]} />
     </View>
@@ -17,10 +27,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    height: 50,
     backgroundColor: '#f1f1f1',
     borderRadius: 8,
     paddingHorizontal: 10,
+  },
+  small: {
+    height: 35,
+    marginBottom: 15,
+  },
+  large: {
+    height: 50,
     marginBottom: 20,
   },
   input: {
@@ -29,5 +45,8 @@ const styles = StyleSheet.create({
   },
   withIcon: {
     marginLeft: 10,
+  },
+  prefix: {
+    marginRight: 3,
   },
 });
