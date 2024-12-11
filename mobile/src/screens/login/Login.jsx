@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import request from '../../utils/request';
+import PageView from '../../components/PageView';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -29,6 +30,7 @@ export default function Login() {
     request('/login', {
       method: 'POST',
       body: form,
+      api: false,
     }).then((data) => {
       updateAuthentication(data);
       navigation.navigate('Pedidos');
@@ -49,10 +51,8 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        Login
-      </Text>
+    <PageView centered
+      title='Login'>
       <Input value={form.login}
         placeholder='Usuário'
         onChangeText={(value) => changeForm(value, 'login')}
@@ -72,22 +72,6 @@ export default function Login() {
         onPress={handleSubmit}>
         Entrar
       </Button>
-    </View>
+    </PageView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 32,
-    paddingBottom: 40,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-});
+}
