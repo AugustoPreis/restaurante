@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import request from '../../utils/request';
 import { useAuth } from '../../context/AuthContext';
 import PageView from '../../components/PageView';
@@ -8,6 +9,7 @@ import Item from './Item';
 export default function Pedidos() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigator = useNavigation();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -29,6 +31,10 @@ export default function Pedidos() {
     });
   }
 
+  const abrirPedido = (pedido) => {
+    navigator.navigate('PedidoDetalhes', { id: pedido.id });
+  }
+
   return (
     <PageView title='Pedidos Abertos'
       centered='horizontal'
@@ -40,7 +46,8 @@ export default function Pedidos() {
         ) : (
           data.map((item) => (
             <Item key={item.id}
-              data={item} />
+              data={item}
+              abrirPedido={() => abrirPedido(item)} />
           ))
         )}
       </ScrollView>

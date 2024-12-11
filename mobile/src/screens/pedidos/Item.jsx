@@ -1,32 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { format } from 'date-fns';
+import globalStyles from '../../utils/globalStyles';
 import { formatCurrency } from '../../utils/currency';
 
-export default function Item({ data }) {
+export default function Item({ data, abrirPedido }) {
   const { mesa, numero, valor, dataCadastro } = data;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.mesa}>
-        {mesa.numero} - {mesa.descricao}
-      </Text>
-      <Text style={styles.pedido}>
-        Pedido Nº {numero}
-      </Text>
-      <Text style={styles.item}>
-        <Text style={styles.bold}>
-          Valor:&nbsp;
+    <TouchableOpacity onPress={abrirPedido}>
+      <View style={styles.container}>
+        <Text style={styles.mesa}>
+          {mesa.numero} - {mesa.descricao}
         </Text>
-        {formatCurrency(valor)}
-      </Text>
-      <Text style={styles.item}>
-        <Text style={styles.bold}>
-          Aberto em:&nbsp;
+        <Text style={[styles.pedido, globalStyles.marginBottom]}>
+          Pedido Nº {numero}
         </Text>
-        {format(new Date(dataCadastro), 'dd/MM/yyyy HH:mm')}
-      </Text>
-    </View>
+        <Text style={styles.item}>
+          <Text style={styles.bold}>
+            Valor:&nbsp;
+          </Text>
+          {formatCurrency(valor)}
+        </Text>
+        <Text style={styles.item}>
+          <Text style={styles.bold}>
+            Aberto em:&nbsp;
+          </Text>
+          {format(new Date(dataCadastro), 'dd/MM/yyyy HH:mm')}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -48,8 +51,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingBottom: 20,
     marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#00000020',
   },
   item: {
     paddingVertical: 5,
